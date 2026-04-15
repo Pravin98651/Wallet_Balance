@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallet-balance-app
+  labels:
+    app: wallet-balance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wallet-balance
+  template:
+    metadata:
+      labels:
+        app: wallet-balance
+    spec:
+      containers:
+      - name: wallet-balance
+        image: pravin98651/wallet-balance:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallet-balance-service
+spec:
+  selector:
+    app: wallet-balance
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
