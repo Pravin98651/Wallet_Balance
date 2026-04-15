@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id'
         DOCKER_IMAGE = 'pravin98651/wallet-balance'
         DOCKER_TAG = "v${env.BUILD_NUMBER}"
     }
