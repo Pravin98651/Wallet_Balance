@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: wallet-balance
-        image: pravin98651/wallet-balance:latest
+        image: pravin98651/wallet-balance:local
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
         resources:
