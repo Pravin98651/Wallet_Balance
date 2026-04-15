@@ -27,29 +27,23 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                dir('Wallet_Balance') {
-                    bat 'mvn clean test'
-                }
+                bat 'mvn clean test'
             }
         }
 
         stage('Package') {
             steps {
-                dir('Wallet_Balance') {
-                    bat 'mvn clean package -DskipTests'
-                }
+                bat 'mvn clean package -DskipTests'
             }
         }
 
         stage('Docker Build & Push') {
             steps {
-                dir('Wallet_Balance') {
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                            def app = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                            app.push()
-                            app.push("latest")
-                        }
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
+                        def app = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                        app.push()
+                        app.push("latest")
                     }
                 }
             }
@@ -57,10 +51,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                dir('Wallet_Balance') {
-                    script {
-                        bat "kubectl set image deployment/wallet-balance-app wallet-balance=${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    }
+                script {
+                    bat "kubectl set image deployment/wallet-balance-app wallet-balance=${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
